@@ -42,7 +42,7 @@ search(valor_title, valor)
 #smtpObj.login("totempedro941@gmail.com", "Insano0$")
 def send_test_mail(body):
     sender_email = "phnovaisnew@outlook.com"
-    receiver_email = 'totempedro941@gmail.com'
+    receiver_email = 'phnovais7@gmail.com'
     context = ssl.create_default_context()
     msg = MIMEMultipart()
     msg['Subject'] = 'Cobrança'
