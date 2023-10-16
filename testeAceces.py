@@ -62,6 +62,7 @@ def send_test_mail(body):
             smtpObj.starttls(context=context)
             smtpObj.login("phnovaisnew@outlook.com", "Insano01$")
             smtpObj.sendmail(sender_email, receiver_email, msg.as_string())
+            print('Enviado')
     except Exception as e:
         print(e)
 
