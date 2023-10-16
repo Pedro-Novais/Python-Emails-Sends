@@ -11,7 +11,7 @@ def search(title, values):
         print("")
         #print(title)
         #print(atrb)
-
+message = "Teste de mensagem automatiza pelo python, bla bla bla bla"
 aba = wb['Planilha1']
 valor_title = []
 valor = []
@@ -31,7 +31,7 @@ for linha in aba:
         #print(f'Coluna {posC}, linha {posR} contém células: {valor}')
 #print(valor_title)
 #print(valor)
-
+print(valor[0][2])
 search(valor_title, valor)
 
 #smtpObj = smtplib.SMTP('smtp.gmail.com', 465)
@@ -39,13 +39,13 @@ search(valor_title, valor)
 #smtpObj.ehlo()
 #smtpObj.starttls()
 #smtpObj.login("totempedro941@gmail.com", "Insano0$")
-
 def send_test_mail(body):
+    
     sender_email = "phnovaisnew@outlook.com"
-    receiver_email = "phnovais7@gmail.com"
+    receiver_email = 'totempedro941@gmail.com'
     context = ssl.create_default_context()
     msg = MIMEMultipart()
-    msg['Subject'] = '[Email Test]'
+    msg['Subject'] = 'Cobrança'
     msg['From'] = sender_email
     msg['To'] = receiver_email
 
@@ -62,7 +62,7 @@ def send_test_mail(body):
         print(e)
 
 if __name__ == '__main__':
-    send_test_mail("Testando")
+    send_test_mail(message)
 
 """
 emailSender = "phnovaisnew@outlook.com"
