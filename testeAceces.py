@@ -2,6 +2,7 @@ import smtplib, ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
+from email.mime.application import MIMEApplication
 import openpyxl
 
 wb = openpyxl.load_workbook('teste.xlsx')
@@ -40,7 +41,6 @@ search(valor_title, valor)
 #smtpObj.starttls()
 #smtpObj.login("totempedro941@gmail.com", "Insano0$")
 def send_test_mail(body):
-    
     sender_email = "phnovaisnew@outlook.com"
     receiver_email = 'totempedro941@gmail.com'
     context = ssl.create_default_context()
@@ -51,6 +51,10 @@ def send_test_mail(body):
 
     msgText = MIMEText('<b>%s</b>' % (body), 'html')
     msg.attach(msgText)
+
+    pdf = MIMEApplication(open('QRCode.pdf', 'rb').read())
+    pdf.add_header('Content-Disposition', 'attachment', filename= "QRCode.pdf")
+    msg.attach(pdf)
 
     try:
         with smtplib.SMTP('smtp.office365.com', 587) as smtpObj:
