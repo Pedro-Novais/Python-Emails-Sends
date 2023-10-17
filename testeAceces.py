@@ -3,16 +3,18 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.application import MIMEApplication
+from string import Template
 import openpyxl
+import email.message
 
 wb = openpyxl.load_workbook('teste.xlsx')
 
 def search(title, values):
     for atrb in values:
         print("")
-        #print(title)
-        #print(atrb)
-message = "Teste de mensagem automatiza pelo python, bla bla bla bla"
+        print(title)
+        print(atrb)
+
 aba = wb['Planilha1']
 valor_title = []
 valor = []
@@ -29,29 +31,47 @@ for linha in aba:
             i = 1
         if(posR > 1):
             valor[posR-2].append(valorT)   
-        #print(f'Coluna {posC}, linha {posR} contém células: {valor}')
-#print(valor_title)
-#print(valor)
-print(valor[0][2])
-search(valor_title, valor)
 
-#smtpObj = smtplib.SMTP('smtp.gmail.com', 465)
+if __name__ == '__main__':
+    search(valor_title, valor)
 
-#smtpObj.ehlo()
-#smtpObj.starttls()
-#smtpObj.login("totempedro941@gmail.com", "Insano0$")
-def send_test_mail(body):
+def read_template(filename):
+    with open(filename, 'r', encoding='utf-8') as template_file:
+        template_file_content = template_file.read()
+    return Template(template_file_content)
+
+def send_test_mail():
     sender_email = "phnovaisnew@outlook.com"
-    receiver_email = 'phnovais7@gmail.com'
+    receiver_email = 'totempedro941@gmail.com'
+    
     context = ssl.create_default_context()
-    msg = MIMEMultipart()
+    
+    msg = MIMEMultipart('alternative')
+    #msg = email.message.Message()
     msg['Subject'] = 'Cobrança'
     msg['From'] = sender_email
     msg['To'] = receiver_email
+    #msg.add_header('Content-Type', 'text/html')
+    #msg.set_payload(msgt)  
 
-    msgText = MIMEText('<b>%s</b>' % (body), 'html')
-    msg.attach(msgText)
+    file = read_template("ind.txt")
 
+    message = file.substitute(id='pedroooooooooooooooooooooooooo')
+    """message = file.substitute(boleto='BoletoTeste')
+    message = file.substitute(data='Datateste de tamanho')
+    message = file.substitute(nota='notateste')
+    message = file.substitute(razao='teste')
+    message = file.substitute(cnpj='cnteste')
+    message = file.substitute(descr='de')
+    message = file.substitute(valorB='teste')
+    message = file.substitute(valorL='teste')
+    message = file.substitute(dataV='t')
+    message = file.substitute(email='teste')"""
+    print(message)
+    
+    msg.attach(MIMEText(message, 'html'))
+   
+    
     pdf = MIMEApplication(open('QRCode.pdf', 'rb').read())
     pdf.add_header('Content-Disposition', 'attachment', filename= "QRCode.pdf")
     msg.attach(pdf)
@@ -67,24 +87,4 @@ def send_test_mail(body):
         print(e)
 
 if __name__ == '__main__':
-    send_test_mail(message)
-
-"""
-emailSender = "phnovaisnew@outlook.com"
-myThroaway = "totempedro941@gmail.com"
-emailRecipients = [myThroaway]
-newEmail = ""From: From Person phnovais7@gmail.com
-            To: To Person totempedro941@gmail.com
-            Subject: Email Test
-            This is the body of the email.
-            ""
-try:
-    smtpObj = smtplib.SMTP('smtp.office365.com', 587)
-    smtpObj.ehlo()
-    smtpObj.starttls()
-    smtpObj.login("phnovaisnew@outlook.com", "Insano01$")
-    smtpObj.sendmail(emailSender, emailRecipients, newEmail)
-    print ("Certo")
-except Exception as e:
-    print (e)
-"""
+    send_test_mail()

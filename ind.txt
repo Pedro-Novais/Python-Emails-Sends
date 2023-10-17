@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table</title>
+
+    <style>
+      body table tr:nth-child(1) {
+        font-family: "Open Sans", sans-serif;
+        background-color: #9caeb3;
+      }
+      body table th {
+        padding: 1rem;
+      }/*# sourceMappingURL=style.css.map */
+    </style>
+</head>
+<body>
+<p>Boa tarde.</p>
+
+<p>Prezado</p>
+
+<p>Como conversado via Whatzapp , segue em anexo os boletos com as datas atualizadas, das renegociações a seguir,</p>
+    <table style="font-family: "Open Sans", sans-serif;">
+        <tr style="background-color:#9caeb3">
+          <th style="padding: 1rem;">Id Interno</th>
+          <th style="padding: 1rem;">Nº Boleto</th>
+          <th style="padding: 1rem;">Data de Emissão</th>
+          <th style="padding: 1rem;">Nº Nota Fiscal</th>
+          <th style="padding: 1rem;">Razão Social</th>
+          <th style="padding: 1rem;">CNPJ</th>
+          <th style="padding: 1rem;">Descrição do Serviço</th>
+          <th style="padding: 1rem;">Valor Bruto</th>
+          <th style="padding: 1rem;">Valor Líquido</th>
+          <th style="padding: 1rem;">Data de Vencimento</th>
+          <th style="padding: 1rem;">E-mail</th>
+        </tr>
+        <tr>
+            <th>${id}</th>
+            
+        </tr>
+      </table>
+
+      <p>Qualquer dúvida estou à disposição,</p>
+
+      <p>Att.,</p>
+</body>
+</html>
