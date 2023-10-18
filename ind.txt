@@ -16,7 +16,7 @@
     </style>
 </head>
 <body>
-<p>Boa tarde.</p>
+<p style="font-size: 2rem">Boa tarde.</p>
 
 <p>Prezado</p>
 
