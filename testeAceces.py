@@ -4,10 +4,11 @@ from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.application import MIMEApplication
 from string import Template
-import openpyxl
 import email.message
+import openpyxl
 
-wb = openpyxl.load_workbook('teste.xlsx')
+
+wb = openpyxl.load_workbook('excel/teste_faturamento.xlsx')
 
 def search(title, values):
     for atrb in values:
@@ -15,9 +16,11 @@ def search(title, values):
         print(title)
         print(atrb)
 
-aba = wb['Planilha1']
+aba = wb['TESTE']
 valor_title = []
 valor = []
+valor_teste = []
+save_email = []
 i = 0
 for linha in aba:
     if(i>0):
@@ -30,10 +33,14 @@ for linha in aba:
             valor_title.append(valorT)
             i = 1
         if(posR > 1):
-            valor[posR-2].append(valorT)   
+            if(posR < 8):
+                valor[posR-2].append(valorT)
 
 if __name__ == '__main__':
     search(valor_title, valor)
+
+print(valor[0][10])
+print(save_email)
 
 def read_template(filename):
     with open(filename, 'r', encoding='utf-8') as template_file:
@@ -45,36 +52,43 @@ def send_test_mail():
     receiver_email = 'totempedro941@gmail.com'
     
     context = ssl.create_default_context()
-    
+
     msg = MIMEMultipart('alternative')
-    #msg = email.message.Message()
     msg['Subject'] = 'Cobrança'
     msg['From'] = sender_email
     msg['To'] = receiver_email
-    #msg.add_header('Content-Type', 'text/html')
-    #msg.set_payload(msgt)  
 
-    file = read_template("ind.txt")
+    file = read_template("template/ind.txt")
+    
+    infos = ['','','','','','','','','','','']
+    for i in range(len(infos)):
+        infos[i] = valor[0][i]
 
-    message = file.substitute(id='pedroooooooooooooooooooooooooo')
-    """message = file.substitute(boleto='BoletoTeste')
-    message = file.substitute(data='Datateste de tamanho')
-    message = file.substitute(nota='notateste')
-    message = file.substitute(razao='teste')
-    message = file.substitute(cnpj='cnteste')
-    message = file.substitute(descr='de')
-    message = file.substitute(valorB='teste')
-    message = file.substitute(valorL='teste')
-    message = file.substitute(dataV='t')
-    message = file.substitute(email='teste')"""
-    print(message)
+    tmp_teste = {
+        'ID':infos[0],
+        'BLT':infos[1],
+        'DATA_EMISSAO':infos[2],
+        'NOTA': infos[3],
+        'RAZAO': infos[4],
+        'CNPJ': infos[5],
+        'DESCR': infos[6],
+        'VALORB': infos[7],
+        'VALORL': infos[8],
+        'DATA_VENC': infos[9],
+        'EMAIL': infos[10]
+        }
     
-    msg.attach(MIMEText(message, 'html'))
-   
-    
-    pdf = MIMEApplication(open('QRCode.pdf', 'rb').read())
+    tmp = file.safe_substitute(tmp_teste)
+    msg.attach(MIMEText(tmp, 'html'))
+
+    pdf = MIMEApplication(open('pdf/QRCode.pdf', 'rb').read())
     pdf.add_header('Content-Disposition', 'attachment', filename= "QRCode.pdf")
     msg.attach(pdf)
+
+    with open('ass/assinatura.jpg', 'rb') as fp:
+        img = MIMEImage(fp.read())
+        img.add_header('Content-Disposition', 'outline', filename="ass/assinatura.jpg")
+        msg.attach(img)
 
     try:
         with smtplib.SMTP('smtp.office365.com', 587) as smtpObj:

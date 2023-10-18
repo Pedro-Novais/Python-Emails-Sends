@@ -3,7 +3,7 @@ from string import Template
 import codecs 
 import webbrowser
 
-wb = openpyxl.load_workbook('teste_faturamento.xlsx')
+wb = openpyxl.load_workbook('excel/teste_faturamento.xlsx')
 
 def search(title, values):
     for atrb in values:
@@ -27,17 +27,16 @@ for linha in aba:
             i = 1
         if(posR > 1):
             valor[posR-2].append(valorT)
-            print()
+            #print()
             #print(valor_title)
             #print(valor[posR-2])   
 
 if __name__ == '__main__':
     search(valor_title, valor)
 
-#print("")
-#print(valor[1])
+print("")
+print(valor_title)
+print(valor[0][10])
 
-file = codecs.open("index.html", 'r', "utf-8") 
+file = codecs.open("template/index.html", 'r', "utf-8") 
 print(file.read()) 
-
-webbrowser.open('index.html')  
