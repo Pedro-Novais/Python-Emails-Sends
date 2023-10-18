@@ -6,7 +6,6 @@ from email.mime.application import MIMEApplication
 from string import Template
 import openpyxl
 
-
 wb = openpyxl.load_workbook('excel/teste_faturamento.xlsx')
 
 def search(title, values):
@@ -49,9 +48,9 @@ def read_template(filename):
     return Template(template_file_content)
 
 def send_test_mail():
-    for ini in range(1):
+    for ini in range(6):
         sender_email = "phnovaisnew@outlook.com"
-        receiver_email = "totempedro941@gmail.com"
+        receiver_email = save_email[ini]
         
         context = ssl.create_default_context()
 
@@ -64,21 +63,24 @@ def send_test_mail():
         
         infos = ['','','','','','','','','','','']
         data = 0
+        data_two = 0
         for i in range(len(infos)):
             infos[i] = valor[ini][i]
-        if(i == 2):
-            data = infos[2].strftime("%d/%m/%Y")
+            if(i == 2):
+                data = format(infos[2], "%d/%m/%Y")
+            if(i == 9):
+                data_two = format(infos[9], "%d/%m/%Y")
         tmp_teste = {
             'ID':infos[0],
             'BLT':infos[1],
-            'DATA_EMISSAO':infos[2],
+            'DATA_EMISSAO':data,
             'NOTA': infos[3],
             'RAZAO': infos[4],
             'CNPJ': infos[5],
             'DESCR': infos[6],
             'VALORB': infos[7],
             'VALORL': infos[8],
-            'DATA_VENC': infos[9],
+            'DATA_VENC': data_two,
             'EMAIL': infos[10]
             }
         tmp = file.safe_substitute(tmp_teste)
