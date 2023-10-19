@@ -47,29 +47,48 @@ def read_template(filename):
     return Template(template_file_content)
 
 def send_test_mail():
+    server = 'smtp.office365.com'
+    port = 587
+    sender_email = "phnovaisnew@outlook.com"
+    password = "Insano01$"
     for ini in range(2):
-        sender_email = "phnovaisnew@outlook.com"
-        password = "Insano01$"
+        msg = MIMEMultipart('alternative')
         receiver_email = save_email[ini]
-
-        subject = ""
-        
-        context = ssl.create_default_context()
 
         file = read_template("template/ind.txt")
         
         infos = ['','','','','','','','','','','']
         data = 0
+        subject = ""
         data_two = 0
+        valorB = 0
+        valorL = 0
+
         for i in range(len(infos)):
             infos[i] = valor[ini][i]
             if(i == 2):
                 data = format(infos[2], "%d/%m/%Y")
             if(i == 6):
                 subject = "FATURAMENTO E-DEPLOY - " + infos[6]
+            if(i == 7):
+                string = str(infos[7])
+                change = string.replace('.',',')
+                if(len(change) < 6):
+                    valorB = f'R${change}0'
+                else:
+                    valorB = f'R${change}'
+            if(i == 8):
+                #valorL = infos[8]
+                string = str(infos[8])
+                change = string.replace('.',',')
+                if(len(change) < 6):
+                    valorL = f'R${change}0'
+                else:
+                    valorL = f'R${change}'
             if(i == 9):
                 data_two = format(infos[9], "%d/%m/%Y")
-        tmp_teste = {
+        
+        tmp_html = {
             'ID':infos[0],
             'BLT':infos[1],
             'DATA_EMISSAO':data,
@@ -77,33 +96,37 @@ def send_test_mail():
             'RAZAO': infos[4],
             'CNPJ': infos[5],
             'DESCR': infos[6],
-            'VALORB': infos[7],
-            'VALORL': infos[8],
+            'VALORB': valorB,
+            'VALORL': valorL,
             'DATA_VENC': data_two,
             #'EMAIL': infos[10]
             }
         
-        msg = MIMEMultipart('alternative')
+        tmp = file.safe_substitute(tmp_html)
+        msg.attach(MIMEText(tmp, 'html'))
+
+        title_file = ["12345.pdf", "boleto.pdf"]
+        for num in range(2):
+            pdf = MIMEApplication(open(f'pdf/Line_{ini}/QRCode_{num}.pdf', 'rb').read())
+            pdf.add_header('Content-Disposition', 'attachment', filename= title_file[num])
+            msg.attach(pdf)
+      
         msg['Subject'] = subject
         msg['From'] = sender_email
         msg['To'] = receiver_email
 
-        tmp = file.safe_substitute(tmp_teste)
-        msg.attach(MIMEText(tmp, 'html'))
-
-        pdf = MIMEApplication(open('pdf/QRCode.pdf', 'rb').read())
-        pdf.add_header('Content-Disposition', 'attachment', filename= "QRCode.pdf")
-        msg.attach(pdf)
+        context = ssl.create_default_context()
 
         try:
-            with smtplib.SMTP('smtp.office365.com', 587) as smtpObj:
+            with smtplib.SMTP(server, port) as smtpObj:
                 smtpObj.ehlo()
                 smtpObj.starttls(context=context)
+                smtpObj.ehlo()
                 smtpObj.login(sender_email, password)
                 smtpObj.sendmail(sender_email, receiver_email, msg.as_string())
-                print(i,"º email - Enviado")
+                print(f"E-mail da linha {ini+1} enviado")
         except Exception as e:
-            print(i,"º email - Erro ao enviar")
+            print(f"E-mail da linha {ini+1}, falha ao enviar")
             print(e)
 
 if __name__ == '__main__':

@@ -44,6 +44,6 @@
 
       <p>Att.,</p>
 
-      <img src="https://i.postimg.cc/W1LkPKRX/assinaturap.png" alt="Assinatura" width="40%"/>
+      <img src="https://i.postimg.cc/Y03dr3Bb/assinatura.png" alt="Assinatura"/>
 </body>
 </html>
