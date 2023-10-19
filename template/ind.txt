@@ -23,7 +23,7 @@
           <th style="padding: 0.5rem; border-right:solid 1px; border-bottom:solid 1px; border-top:solid 1px;">Valor Bruto</th>
           <th style="padding: 0.5rem; background-color:#b9b9b9; border-right:solid 1px; border-bottom:solid 1px; border-top:solid 1px;">Valor Líquido</th>
           <th style="padding: 0.5rem; border-right:solid 1px; border-bottom:solid 1px; border-top:solid 1px;">Data de Vencimento</th>
-          <th style="padding: 0.5rem; background-color:#b9b9b9;border-bottom:solid 1px; border-right:solid 1px; border-top:solid 1px;">E-mail</th>
+          <!--<th style="padding: 0.5rem; background-color:#b9b9b9;border-bottom:solid 1px; border-right:solid 1px; border-top:solid 1px;">E-mail</th>-->
         </tr>
         <tr>
             <th style="padding: 0.5rem; background-color:#fff; border-left:solid 1px; border-right:solid 1px; border-bottom:solid 1px;">${ID}</th>
@@ -36,7 +36,7 @@
             <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${VALORB}</th>
             <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${VALORL}</th>
             <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${DATA_VENC}</th>
-            <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${EMAIL}</th>
+            <!--<th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${EMAIL}</th>-->
         </tr>
       </table>
 
@@ -44,6 +44,6 @@
 
       <p>Att.,</p>
 
-      <div><img src="../ass/assinatura.jpg" alt=""><div>
+      <img src="https://i.postimg.cc/W1LkPKRX/assinaturap.png" alt="Assinatura" width="40%"/>
 </body>
 </html>

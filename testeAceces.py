@@ -1,7 +1,6 @@
 import smtplib, ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
 from email.mime.application import MIMEApplication
 from string import Template
 import openpyxl
@@ -31,11 +30,11 @@ for linha in aba:
             valor_title.append(valorT)
             i = 1
         if(posR > 1):
-            if(posR < 8):
+            if(posR < 9):
                 valor[posR-2].append(valorT)
 
 def save():
-    for i in range(6):
+    for i in range(2):
         save_email.append(valor[i][10])
     print(save_email)    
 
@@ -48,16 +47,14 @@ def read_template(filename):
     return Template(template_file_content)
 
 def send_test_mail():
-    for ini in range(6):
+    for ini in range(2):
         sender_email = "phnovaisnew@outlook.com"
+        password = "Insano01$"
         receiver_email = save_email[ini]
+
+        subject = ""
         
         context = ssl.create_default_context()
-
-        msg = MIMEMultipart('alternative')
-        msg['Subject'] = 'Cobrança'
-        msg['From'] = sender_email
-        msg['To'] = receiver_email
 
         file = read_template("template/ind.txt")
         
@@ -68,6 +65,8 @@ def send_test_mail():
             infos[i] = valor[ini][i]
             if(i == 2):
                 data = format(infos[2], "%d/%m/%Y")
+            if(i == 6):
+                subject = "FATURAMENTO E-DEPLOY - " + infos[6]
             if(i == 9):
                 data_two = format(infos[9], "%d/%m/%Y")
         tmp_teste = {
@@ -81,8 +80,14 @@ def send_test_mail():
             'VALORB': infos[7],
             'VALORL': infos[8],
             'DATA_VENC': data_two,
-            'EMAIL': infos[10]
+            #'EMAIL': infos[10]
             }
+        
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = sender_email
+        msg['To'] = receiver_email
+
         tmp = file.safe_substitute(tmp_teste)
         msg.attach(MIMEText(tmp, 'html'))
 
@@ -90,19 +95,15 @@ def send_test_mail():
         pdf.add_header('Content-Disposition', 'attachment', filename= "QRCode.pdf")
         msg.attach(pdf)
 
-        with open('ass/assinatura.jpg', 'rb') as fp:
-            img = MIMEImage(fp.read())
-            img.add_header('Content-Disposition', 'outline', filename="ass/assinatura.jpg")
-            msg.attach(img)
-
         try:
             with smtplib.SMTP('smtp.office365.com', 587) as smtpObj:
                 smtpObj.ehlo()
                 smtpObj.starttls(context=context)
-                smtpObj.login("phnovaisnew@outlook.com", "Insano01$")
+                smtpObj.login(sender_email, password)
                 smtpObj.sendmail(sender_email, receiver_email, msg.as_string())
-                print('Enviado')
+                print(i,"º email - Enviado")
         except Exception as e:
+            print(i,"º email - Erro ao enviar")
             print(e)
 
 if __name__ == '__main__':
