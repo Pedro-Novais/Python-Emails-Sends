@@ -6,7 +6,7 @@ from email.mime.image import MIMEImage
 from string import Template
 import openpyxl
 
-wb = openpyxl.load_workbook('excel/teste_faturamento.xlsx')
+wb = openpyxl.load_workbook('excel/teste_faturamento-teste-email-duplicado.xlsx')
 
 def search(title, values):
     for atrb in values:
@@ -31,17 +31,29 @@ for linha in aba:
             valor_title.append(valorT)
             i = 1
         if(posR > 1):
+            #valor[posR-2].append(valorT)
             if(posR < 9):
                 valor[posR-2].append(valorT)
-
+email_rep = 0
+cont = 0
 def save():
+    
     for i in range(3):
         save_email.append(valor[i][10])
+        if(len(save_email) > 1):
+            before_email = save_email[i-1]
+            if(save_email[i] == before_email):
+                cont = i
+                while(valor[cont-1] == valor[cont]):
+                    email_rep = email_rep + 1
+                    cont = cont + 1
+                    print(cont)
+
     print(save_email)    
 
 if __name__ == '__main__':
     save()
-
+print(len(save_email))
 def read_template(filename):
     with open(filename, 'r', encoding='utf-8') as template_file:
         template_file_content = template_file.read()
