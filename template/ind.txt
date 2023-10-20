@@ -43,7 +43,12 @@
       <p>Qualquer dúvida estou à disposição,</p>
 
       <p>Att.,</p>
-
-      <img src="https://i.postimg.cc/Y03dr3Bb/assinatura.png" alt="Assinatura"/>
+      <table>
+        <tr>
+          <th>
+            ${IMAGEM}
+          </th>
+        </tr>  
+      </table>
 </body>
 </html>
