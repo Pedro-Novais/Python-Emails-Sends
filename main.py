@@ -6,7 +6,7 @@ from email.mime.image import MIMEImage
 from string import Template
 import openpyxl
 
-wb = openpyxl.load_workbook('excel/teste_faturamento-teste-email-duplicado.xlsx')
+wb = openpyxl.load_workbook('excel/teste_faturamento-teste-email-duplicado 1.xlsx')
 
 def search(title, values):
     for atrb in values:
@@ -31,40 +31,90 @@ for linha in aba:
             valor_title.append(valorT)
             i = 1
         if(posR > 1):
-            #valor[posR-2].append(valorT)
             if(posR < 9):
                 valor[posR-2].append(valorT)
-email_rep = 0
+
+for i in range(len(valor)):
+    save_email.append(valor[i][10])
+
+email_rep = []
 cont = 0
-def save():
-    
-    for i in range(3):
-        save_email.append(valor[i][10])
-        if(len(save_email) > 1):
-            before_email = save_email[i-1]
-            if(save_email[i] == before_email):
-                cont = i
-                while(valor[cont-1] == valor[cont]):
-                    email_rep = email_rep + 1
-                    cont = cont + 1
-                    print(cont)
+before_email = 0
+now_email = 0
+back = 0
+index_del = []
 
-    print(save_email)    
+for i in range(len(save_email)):
+    if(i > 0):
+        before_email = save_email[i-1]
+        now_email = save_email[i]
+        if(now_email == before_email):
+            cont = i - 1 
+            email_rep.append(valor[cont])
+            back = back + 1
+            index_del.append(cont)
+        elif(now_email != before_email):
+                if(back > 0):
+                    cont = i - 1 
+                    email_rep.append(valor[cont])
+                    index_del.append(cont)
+                    back = -1
+           
+for i in range(len(index_del)):
+    del save_email[index_del[0]]
+    del valor[index_del[0]]
 
-if __name__ == '__main__':
-    save()
-print(len(save_email))
+
+
+print(save_email)
+print()
+print(email_rep)
+print(len(email_rep))
+print(valor)
+
 def read_template(filename):
     with open(filename, 'r', encoding='utf-8') as template_file:
         template_file_content = template_file.read()
     return Template(template_file_content)
 
 def send_test_mail():
+
+    """for i in range(len(valor)):
+        save_email.append(valor[i][10])
+
+    email_rep = []
+    cont = 0
+    before_email = 0
+    now_email = 0
+    back = 0
+    index_del = []
+
+    for i in range(len(save_email)):
+        if(i > 0):
+            before_email = save_email[i-1]
+            now_email = save_email[i]
+            if(now_email == before_email):
+                cont = i - 1 
+                email_rep.append(valor[cont])
+                back = back + 1
+                index_del.append(cont)
+            elif(now_email != before_email):
+                    if(back > 0):
+                        cont = i - 1 
+                        email_rep.append(valor[cont])
+                        index_del.append(cont)
+                        back = -1
+            
+    for i in range(len(index_del)):
+        del save_email[index_del[0]]
+        del valor[index_del[0]]"""
+    
     #server = 'smtp.office365.com'
     server = 'smtp-mail.outlook.com'
     port = 587
     sender_email = "phnovaisnew@outlook.com"
     password = "Insano01$"
+
     for ini in range(3):
         msg = MIMEMultipart('alternative')
         receiver_email = save_email[ini]
@@ -97,7 +147,6 @@ def send_test_mail():
                 else:
                     valorB = f'R${change}'
             if(i == 8):
-                #valorL = infos[8]
                 string = str(infos[8])
                 change = string.replace('.',',')
                 if(len(change) < 6):
@@ -118,6 +167,7 @@ def send_test_mail():
                                         log_email = img_html
         blt = infos[1]
         nota = infos[3]
+
         tmp_html = {
             'ID':infos[0],
             'BLT': blt,
