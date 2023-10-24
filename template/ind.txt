@@ -38,6 +38,13 @@
             <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${DATA_VENC}</th>
             <!--<th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${EMAIL}</th>-->
         </tr>
+        <tr>${INFOS2}</tr>
+        <tr>${INFOS3}</tr>
+        <tr>${INFOS4}</tr>
+        <tr>${INFOS5}</tr>
+        <tr>${INFOS6}</tr>
+        <tr>${INFOS7}</tr>
+        <tr>${INFOS8}</tr>
       </table>
 
       <p>Qualquer dúvida estou à disposição,</p>
