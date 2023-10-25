@@ -1,7 +1,6 @@
 import openpyxl
 from string import Template
 import codecs 
-import webbrowser
 
 wb = openpyxl.load_workbook('excel/teste_faturamento.xlsx')
 

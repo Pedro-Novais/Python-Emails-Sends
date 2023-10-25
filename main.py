@@ -70,15 +70,6 @@ for i in range(len(index_del)):
     del save_email[index_del[i]]
     del valor[index_del[i]]
 
-"""#print(save_email)
-#print()
-print(email_rep)
-print('')
-print(valor_rep)
-print('')
-print(valor)
-print('')"""
-
 arq_falta = []
 def verification_pdf():
     exi = 0
@@ -120,9 +111,9 @@ def send_test_mail():
         sender_email = "phnovaisnew@outlook.com"
         password = "Insano01$"
 
-        for ini in range(3):
+        for ini in range(1):
             msg = MIMEMultipart('alternative')
-            receiver_email = f'teste{save_email[ini]}'
+            receiver_email = f'{save_email[ini]}'
 
             file = read_template("template/ind.txt")
             
@@ -134,6 +125,23 @@ def send_test_mail():
             valorL = 0
             
             comment = '<!-- -->'
+            
+            testei = ["","","","","","","","","",""]
+            for indice in range(len(testei)):
+                testei[indice] = valor[1][10]
+            teste = f"""
+            <th style="padding: 0.5rem; background-color:#fff; border-left:solid 1px; border-right:solid 1px; border-bottom:solid 1px;">${testei[0]}</th>
+            <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[1]}</th>
+            <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[2]}</th>
+            <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[3]}</th>
+            <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[4]}</th>
+            <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[5]}</th>
+            <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[6]}</th>
+            <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[7]}</th>
+            <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[8]}</th>
+            <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[9]}</th>
+            """
+
             ver_email = 0
             log_email = """<p style="font-family: 'Passions Conflict', cursive;"> Maria Escobar </p>"""
             img_html = """<img src="https://i.postimg.cc/0yNyxsv6/assinatura-JPG.jpg" alt="Assinatura_E-deploy"/>"""
@@ -187,7 +195,7 @@ def send_test_mail():
                 'DATA_VENC': data_two,
                 'IMAGEM': log_email,
                 #'EMAIL': infos[10]
-                'INFOS2': comment,
+                'INFOS2': teste,
                 'INFOS3': comment,
                 'INFOS4': comment,
                 'INFOS5': comment,
@@ -245,7 +253,7 @@ def send_test_mail():
                 print(f"E-mail: {receiver_email}, falha ao enviar")
                 print(e)
     else:
-        print(f'Boletos/Notas não encontrados: {arq_falta}')
+        print(f'Os seguintes arquivos não foram encontrados: {arq_falta}')
 
 if __name__ == '__main__':
     send_test_mail()
