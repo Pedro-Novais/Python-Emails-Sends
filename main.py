@@ -32,12 +32,15 @@ for linha in aba:
             valor_title.append(valorT)
             i = 1
         if(posR > 1):
-            if(posR < 15):
+            if(posR < 9):
                 valor[posR-2].append(valorT)
 
-for i in range(len(valor)):
+for i in range(7):
+    print(valor[i][10])
     save_email.append(valor[i][10])
 
+
+print(save_email)
 email_rep = []
 valor_rep = []
 qnt_rep = []
@@ -65,41 +68,40 @@ for i in range(len(save_email)):
                     valor_rep.append(valor[cont])
                     index_del.append(cont)
                     back = 0
+        if(i + 1 == len(save_email)):
+            cont = i - 1 
+            email_rep.append(valor[cont][10])
+            valor_rep.append(valor[cont])
+            index_del.append(cont + 1)
 
 for i in range(len(email_rep)):
-    print(i)
+    
     if(i == 0):
         cont_qnt = 2
     if(i > 1):
         decre = i - 1
         ulti = i + 1
         if(email_rep[i] == email_rep[decre]):
-            print('meio')
             cont_qnt = cont_qnt + 1
         if(email_rep[i] != email_rep[decre]):
-            print('final')
             qnt_rep.append([cont_qnt])
             cont_qnt = 1
         if(ulti == len(email_rep)):
-            print('ultima')
             qnt_rep.append([cont_qnt]) 
-
-print(len(email_rep))
-#print(valor_rep)
-#print('')
-print(len(qnt_rep))
 
 index_del.reverse() 
 for i in range(len(index_del)):
-    print(index_del)
     del save_email[index_del[i]]
     del valor[index_del[i]]
 
+print(f'print email após exclusão {save_email}')
+print('')
+print(f'print email duplicado {email_rep}')
 arq_falta = []
 def verification_pdf():
     exi = 0
     dir_arq = ['Boletos', 'Notas']
-    for i in range(3):
+    for i in range(2):
         blt_not = []
 
         blt_not.append(valor[i][1])
@@ -130,22 +132,26 @@ print(arq_falta)
 #state_email = 0
 def send_test_mail():
     if(stop == 0):
+        email = ""
+        email_send = ""
         for i_first in range(1):
-            email = ""
-            email_send = ""
+            i_first = 1
+            print('teste i_first')
             if(i_first == 0):
-                email = len(qnt_rep)
+                email = len(qnt_rep) 
                 email_send = email_rep
+                print(email_send)
             else:
                 email = len(save_email)
                 email_send = save_email
+                print(email_send)
             #server = 'smtp.office365.com'
             server = 'smtp-mail.outlook.com'
             port = 587
             sender_email = "phnovaisnew@outlook.com"
             password = "Insano01$"
 
-            for ini in range(1):
+            for ini in range(email):
 
                 msg = MIMEMultipart('alternative')
                 receiver_email = f't{save_email[ini]}'
