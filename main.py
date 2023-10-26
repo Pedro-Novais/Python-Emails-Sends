@@ -195,7 +195,7 @@ def send_test_mail():
                 'DATA_VENC': data_two,
                 'IMAGEM': log_email,
                 #'EMAIL': infos[10]
-                'INFOS2': teste,
+                'INFOS2': comment,
                 'INFOS3': comment,
                 'INFOS4': comment,
                 'INFOS5': comment,
