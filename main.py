@@ -129,32 +129,39 @@ if __name__ == '__main__':
 print(stop)
 print(arq_falta)
 
-#state_email = 0
 def send_test_mail():
     if(stop == 0):
         email = ""
         email_send = ""
-        for i_first in range(1):
-            i_first = 1
-            print('teste i_first')
+        for i_first in range(2):
             if(i_first == 0):
                 email = len(qnt_rep) 
-                email_send = email_rep
+                email_send = email_rep[i_first]
                 print(email_send)
             else:
                 email = len(save_email)
                 email_send = save_email
                 print(email_send)
+
             #server = 'smtp.office365.com'
             server = 'smtp-mail.outlook.com'
             port = 587
             sender_email = "phnovaisnew@outlook.com"
             password = "Insano01$"
 
-            for ini in range(email):
+            qnt_template = 0
 
+            for ini in range(email):
                 msg = MIMEMultipart('alternative')
-                receiver_email = f't{save_email[ini]}'
+                if(i_first == 0):
+                    num_rep = qnt_rep[0][0] 
+                    print(num_rep)
+                    #email_send = email_send[0]
+
+                if(i_first == 1):
+                    receiver_email = f'{email_send[ini]}'
+                else:
+                    receiver_email = f'{email_send}'
 
                 file = read_template("template/ind.txt")
                 
@@ -164,62 +171,110 @@ def send_test_mail():
                 data_two = 0
                 valorB = 0
                 valorL = 0
-                
-                comment = '<!-- -->'
-                
-                testei = ["","","","","","","","","",""]
-                for indice in range(len(testei)):
-                    testei[indice] = valor[1][10]
-                teste = f"""
-                <th style="padding: 0.5rem; background-color:#fff; border-left:solid 1px; border-right:solid 1px; border-bottom:solid 1px;">${testei[0]}</th>
-                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[1]}</th>
-                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[2]}</th>
-                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[3]}</th>
-                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[4]}</th>
-                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[5]}</th>
-                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[6]}</th>
-                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[7]}</th>
-                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[8]}</th>
-                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">${testei[9]}</th>
-                """
 
                 ver_email = 0
                 log_email = """<p style="font-family: 'Passions Conflict', cursive;"> Maria Escobar </p>"""
                 img_html = """<img src="https://i.postimg.cc/0yNyxsv6/assinatura-JPG.jpg" alt="Assinatura_E-deploy"/>"""
                 img_atm = 0
 
-                for i in range(len(infos)):
-                    infos[i] = valor[ini][i]
-                    if(i == 2):
-                        data = format(infos[2], "%d/%m/%Y")
-                    if(i == 6):
-                        subject = f'FATURAMENTO E-DEPLOY - {infos[6]}'
-                    if(i == 7):
-                        string = str(infos[7])
-                        change = string.replace('.',',')
-                        if(len(change) < 6):
-                            valorB = f'R${change}0'
-                        else:
-                            valorB = f'R${change}'
-                    if(i == 8):
-                        string = str(infos[8])
-                        change = string.replace('.',',')
-                        if(len(change) < 6):
-                            valorL = f'R${change}0'
-                        else:
-                            valorL = f'R${change}'
-                    if(i == 9):
-                        data_two = format(infos[9], "%d/%m/%Y")
-                    if(ver_email == 0):
-                        for i in range(len(receiver_email)):
-                            if(receiver_email[i] == 'g'):
-                                if(receiver_email[i+1] == 'm'):
-                                    if(receiver_email[i+2] == 'a'):
-                                        if(receiver_email[i+3] == 'i'):
-                                            if(receiver_email[i+4] == 'l'):
-                                                img_atm = 1
-                                                ver_email = 1
-                                                log_email = img_html
+                comment = '<!-- -->'
+                tmp_add = [comment,comment,comment,comment,comment,comment,comment,comment,comment,comment]
+                info_add = ['','','','','','','','','','']
+                if(i_first == 0):
+                        for index in range(num_rep):
+                            if(index > 0):
+                                for adding in range(10):
+                                    info_add[adding] = valor_rep[index][adding]
+
+                                template_reu = f"""
+                                <th style="padding: 0.5rem; background-color:#fff; border-left:solid 1px; border-right:solid 1px; border-bottom:solid 1px;">{info_add[0]}</th>
+                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[1]}</th>
+                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[2]}</th>
+                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[3]}</th>
+                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[4]}</th>
+                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[5]}</th>
+                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[6]}</th>
+                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[7]}</th>
+                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[8]}</th>
+                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[9]}</th>
+                                """
+                                tmp_add[index - 1] = template_reu
+                        
+                        if(len(qnt_rep) >= 2):
+                            for delete in range(len(email_rep)):
+                                if(delete < num_rep):
+                                    del email_rep[0]
+                                    #del valor_rep[0]
+                            del qnt_rep[0]
+
+                        email_send = email_rep[0]
+                
+                        for i in range(len(infos)):
+                            infos[i] = valor_rep[ini][i]
+                            if(i == 2):
+                                data = format(infos[2], "%d/%m/%Y")
+                            if(i == 6):
+                                subject = f'FATURAMENTO E-DEPLOY - {infos[6]}'
+                            if(i == 7):
+                                string = str(infos[7])
+                                change = string.replace('.',',')
+                                if(len(change) < 6):
+                                    valorB = f'R${change}0'
+                                else:
+                                    valorB = f'R${change}'
+                            if(i == 8):
+                                string = str(infos[8])
+                                change = string.replace('.',',')
+                                if(len(change) < 6):
+                                    valorL = f'R${change}0'
+                                else:
+                                    valorL = f'R${change}'
+                            if(i == 9):
+                                data_two = format(infos[9], "%d/%m/%Y")
+                            if(ver_email == 0):
+                                for i in range(len(receiver_email)):
+                                    if(receiver_email[i] == 'g'):
+                                        if(receiver_email[i+1] == 'm'):
+                                            if(receiver_email[i+2] == 'a'):
+                                                if(receiver_email[i+3] == 'i'):
+                                                    if(receiver_email[i+4] == 'l'):
+                                                        img_atm = 1
+                                                        ver_email = 1
+                                                        log_email = img_html
+                    
+                if(i_first == 1):
+                    for i in range(len(infos)):
+                        infos[i] = valor[ini][i]
+                        if(i == 2):
+                            data = format(infos[2], "%d/%m/%Y")
+                        if(i == 6):
+                            subject = f'FATURAMENTO E-DEPLOY - {infos[6]}'
+                        if(i == 7):
+                            string = str(infos[7])
+                            change = string.replace('.',',')
+                            if(len(change) < 6):
+                                valorB = f'R${change}0'
+                            else:
+                                valorB = f'R${change}'
+                        if(i == 8):
+                            string = str(infos[8])
+                            change = string.replace('.',',')
+                            if(len(change) < 6):
+                                valorL = f'R${change}0'
+                            else:
+                                valorL = f'R${change}'
+                        if(i == 9):
+                            data_two = format(infos[9], "%d/%m/%Y")
+                        if(ver_email == 0):
+                            for i in range(len(receiver_email)):
+                                if(receiver_email[i] == 'g'):
+                                    if(receiver_email[i+1] == 'm'):
+                                        if(receiver_email[i+2] == 'a'):
+                                            if(receiver_email[i+3] == 'i'):
+                                                if(receiver_email[i+4] == 'l'):
+                                                    img_atm = 1
+                                                    ver_email = 1
+                                                    log_email = img_html
                 blt = infos[1]
                 nota = infos[3]
 
@@ -236,15 +291,15 @@ def send_test_mail():
                     'DATA_VENC': data_two,
                     'IMAGEM': log_email,
                     #'EMAIL': infos[10]
-                    'INFOS2': teste,
-                    'INFOS3': comment,
-                    'INFOS4': comment,
-                    'INFOS5': comment,
-                    'INFOS6': comment,
-                    'INFOS7': comment,
-                    'INFOS8': comment
+                    'INFOS2': tmp_add[0],
+                    'INFOS3': tmp_add[1],
+                    'INFOS4': tmp_add[2],
+                    'INFOS5': tmp_add[3],
+                    'INFOS6': tmp_add[4],
+                    'INFOS7': tmp_add[5],
+                    'INFOS8': tmp_add[6]
                     }
-                
+              
                 tmp = file.safe_substitute(tmp_html)
                 msg.attach(MIMEText(tmp, 'html'))
 
@@ -257,17 +312,18 @@ def send_test_mail():
                 pasta_arq = ""
                 state = 0
                 
-                for num in range(2):
-                    if(state == 0):
-                        pasta = pasta_dir_notas
-                        pasta_arq = pasta_nota
-                        state = 1
-                    elif(state == 1):
-                        pasta = pasta_dir_blt
-                        pasta_arq = pasta_blt
-                    pdf = MIMEApplication(open(f'pdf/{pasta}/{pasta_arq}', 'rb').read())
-                    pdf.add_header('Content-Disposition', 'attachment', filename= title_file[num])
-                    msg.attach(pdf)
+                if(i_first == 1):
+                    for num in range(2):
+                        if(state == 0):
+                            pasta = pasta_dir_notas
+                            pasta_arq = pasta_nota
+                            state = 1
+                        elif(state == 1):
+                            pasta = pasta_dir_blt
+                            pasta_arq = pasta_blt
+                        pdf = MIMEApplication(open(f'pdf/{pasta}/{pasta_arq}', 'rb').read())
+                        pdf.add_header('Content-Disposition', 'attachment', filename= title_file[num])
+                        msg.attach(pdf)
 
                 if(img_atm != 1):
                     with open('assinatura.jpg', 'rb') as fp:
