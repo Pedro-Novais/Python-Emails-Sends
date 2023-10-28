@@ -1,4 +1,4 @@
-import smtplib
+import smtplib 
 import email.message
 server = smtplib.SMTP('smtp.gmail.com:587')
 email_content = """ 

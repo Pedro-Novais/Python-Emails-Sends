@@ -36,11 +36,8 @@ for linha in aba:
                 valor[posR-2].append(valorT)
 
 for i in range(7):
-    print(valor[i][10])
     save_email.append(valor[i][10])
 
-
-print(save_email)
 email_rep = []
 valor_rep = []
 qnt_rep = []
@@ -71,7 +68,7 @@ for i in range(len(save_email)):
         if(i + 1 == len(save_email)):
             cont = i - 1 
             email_rep.append(valor[cont][10])
-            valor_rep.append(valor[cont])
+            valor_rep.append(valor[cont + 1])
             index_del.append(cont + 1)
 
 for i in range(len(email_rep)):
@@ -94,9 +91,9 @@ for i in range(len(index_del)):
     del save_email[index_del[i]]
     del valor[index_del[i]]
 
-print(f'print email após exclusão {save_email}')
+print(f'print email base após exclusão de replicados {save_email}')
 print('')
-print(f'print email duplicado {email_rep}')
+print(f'print email duplicado, após inserção dos mesmos {email_rep}')
 arq_falta = []
 def verification_pdf():
     exi = 0
@@ -126,9 +123,6 @@ def read_template(filename):
 if __name__ == '__main__':
    stop = verification_pdf()
 
-print(stop)
-print(arq_falta)
-
 def send_test_mail():
     if(stop == 0):
         email = ""
@@ -137,11 +131,9 @@ def send_test_mail():
             if(i_first == 0):
                 email = len(qnt_rep) 
                 email_send = email_rep[i_first]
-                print(email_send)
             else:
                 email = len(save_email)
                 email_send = save_email
-                print(email_send)
 
             #server = 'smtp.office365.com'
             server = 'smtp-mail.outlook.com'
@@ -149,15 +141,20 @@ def send_test_mail():
             sender_email = "phnovaisnew@outlook.com"
             password = "Insano01$"
 
-            qnt_template = 0
-
             for ini in range(email):
+                if(ini > 0 ):
+                    if(len(qnt_rep) >= 1):
+                            for delete in range(len(email_rep)):
+                                if(delete < num_rep):
+                                    del email_rep[0]
+                                    del valor_rep[0]
+                            del qnt_rep[0]
+                            if(len(email_rep) > 0):
+                                email_send = email_rep[0]
+
                 msg = MIMEMultipart('alternative')
                 if(i_first == 0):
                     num_rep = qnt_rep[0][0] 
-                    print(num_rep)
-                    #email_send = email_send[0]
-
                 if(i_first == 1):
                     receiver_email = f'{email_send[ini]}'
                 else:
@@ -186,31 +183,67 @@ def send_test_mail():
                                 for adding in range(10):
                                     info_add[adding] = valor_rep[index][adding]
 
+                                for i in range(len(info_add)):
+                                    if(i == 2):
+                                        data = format(info_add[2], "%d/%m/%Y")
+                                    if(i == 6):
+                                        subject = f'FATURAMENTO E-DEPLOY - {info_add[6]}'
+                                    if(i == 7):
+                                        string = str(info_add[7])
+                                        change = string.replace('.',',')
+                                        if(len(change) < 6):
+                                            valorB = f'R${change}0'
+                                        else:
+                                            valorB = f'R${change}'
+                                    if(i == 8):
+                                        string = str(info_add[8])
+                                        change = string.replace('.',',')
+                                        if(len(change) < 6):
+                                            valorL = f'R${change}0'
+                                        else:
+                                            valorL = f'R${change}'
+                                    if(i == 9):
+                                        data_two = format(info_add[9], "%d/%m/%Y")
+
                                 template_reu = f"""
-                                <th style="padding: 0.5rem; background-color:#fff; border-left:solid 1px; border-right:solid 1px; border-bottom:solid 1px;">{info_add[0]}</th>
-                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[1]}</th>
-                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[2]}</th>
-                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[3]}</th>
-                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[4]}</th>
-                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[5]}</th>
-                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[6]}</th>
-                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[7]}</th>
-                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[8]}</th>
-                                <th style="padding: 0.5rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;">{info_add[9]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-left:solid 1px; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{info_add[0]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{info_add[1]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{data}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{info_add[3]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{info_add[4]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;font-size: 1rem; min-width: 10vw">{info_add[5]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{info_add[6]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{valorB}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{valorL}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{data_two}</th>
                                 """
                                 tmp_add[index - 1] = template_reu
-                        
-                        if(len(qnt_rep) >= 2):
-                            for delete in range(len(email_rep)):
-                                if(delete < num_rep):
-                                    del email_rep[0]
-                                    #del valor_rep[0]
-                            del qnt_rep[0]
 
-                        email_send = email_rep[0]
+                                blt = info_add[1]
+                                nota = info_add[3]
+
+                                title_file = [f'Boleto-{blt}.pdf', f'Nota-Fiscal-{nota}.pdf']
+                                pasta_blt = f'{blt}.pdf'
+                                pasta_nota = f'{nota}.pdf'
+                                pasta_dir_blt = f'Boletos'
+                                pasta_dir_notas = f'Notas'
+                                pasta = ""
+                                pasta_arq = ""
+
+                                for num in range(2):
+                                    if(num == 1):
+                                        pasta = pasta_dir_notas
+                                        pasta_arq = pasta_nota   
+                                    elif(num == 0):
+                                        pasta = pasta_dir_blt
+                                        pasta_arq = pasta_blt
+
+                                    pdf = MIMEApplication(open(f'pdf/{pasta}/{pasta_arq}', 'rb').read())
+                                    pdf.add_header('Content-Disposition', 'attachment', filename= title_file[num])
+                                    msg.attach(pdf)
                 
                         for i in range(len(infos)):
-                            infos[i] = valor_rep[ini][i]
+                            infos[i] = valor_rep[0][i]
                             if(i == 2):
                                 data = format(infos[2], "%d/%m/%Y")
                             if(i == 6):
@@ -241,7 +274,6 @@ def send_test_mail():
                                                         img_atm = 1
                                                         ver_email = 1
                                                         log_email = img_html
-                    
                 if(i_first == 1):
                     for i in range(len(infos)):
                         infos[i] = valor[ini][i]
@@ -303,27 +335,27 @@ def send_test_mail():
                 tmp = file.safe_substitute(tmp_html)
                 msg.attach(MIMEText(tmp, 'html'))
 
-                title_file = [f'Nota-Fiscal-{nota}.pdf', f'Boleto-{blt}.pdf']
+                title_file = [f'Boleto-{blt}.pdf', f'Nota-Fiscal-{nota}.pdf']
                 pasta_blt = f'{blt}.pdf'
                 pasta_nota = f'{nota}.pdf'
                 pasta_dir_blt = f'Boletos'
                 pasta_dir_notas = f'Notas'
                 pasta = ""
                 pasta_arq = ""
-                state = 0
+                #state = 0
                 
-                if(i_first == 1):
-                    for num in range(2):
-                        if(state == 0):
-                            pasta = pasta_dir_notas
-                            pasta_arq = pasta_nota
-                            state = 1
-                        elif(state == 1):
-                            pasta = pasta_dir_blt
-                            pasta_arq = pasta_blt
-                        pdf = MIMEApplication(open(f'pdf/{pasta}/{pasta_arq}', 'rb').read())
-                        pdf.add_header('Content-Disposition', 'attachment', filename= title_file[num])
-                        msg.attach(pdf)
+                
+                for num in range(2):
+                    if(num == 1):
+                        pasta = pasta_dir_notas
+                        pasta_arq = pasta_nota
+                    elif(num == 0):
+                        pasta = pasta_dir_blt
+                        pasta_arq = pasta_blt
+
+                    pdf = MIMEApplication(open(f'pdf/{pasta}/{pasta_arq}', 'rb').read())
+                    pdf.add_header('Content-Disposition', 'attachment', filename= title_file[num])
+                    msg.attach(pdf)
 
                 if(img_atm != 1):
                     with open('assinatura.jpg', 'rb') as fp:
@@ -349,8 +381,8 @@ def send_test_mail():
                 except Exception as e:
                     print(f"E-mail: {receiver_email}, falha ao enviar")
                     print(e)
-        else:
-            print(f'Os seguintes arquivos não foram encontrados: {arq_falta}')
+    else:
+        print(f'Os seguintes arquivos não foram encontrados: {arq_falta}')
 
 if __name__ == '__main__':
     send_test_mail()
