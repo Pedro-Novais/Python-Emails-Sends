@@ -211,7 +211,7 @@ def send_test_mail():
                                 <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{data}</th>
                                 <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{info_add[3]}</th>
                                 <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{info_add[4]}</th>
-                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;font-size: 1rem; min-width: 10vw">{info_add[5]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;font-size: 1rem; min-width: 10vw>{info_add[5]}</th>
                                 <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{info_add[6]}</th>
                                 <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{valorB}</th>
                                 <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{valorL}</th>
