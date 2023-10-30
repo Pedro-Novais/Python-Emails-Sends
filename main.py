@@ -32,10 +32,10 @@ for linha in aba:
             valor_title.append(valorT)
             i = 1
         if(posR > 1):
-            if(posR < 9):
-                valor[posR-2].append(valorT)
+            #if(posR < 9):
+            valor[posR-2].append(valorT)
 
-for i in range(7):
+for i in range(len(valor)):
     save_email.append(valor[i][10])
 
 email_rep = []
@@ -71,8 +71,7 @@ for i in range(len(save_email)):
             valor_rep.append(valor[cont + 1])
             index_del.append(cont + 1)
 
-for i in range(len(email_rep)):
-    
+for i in range(len(email_rep)):  
     if(i == 0):
         cont_qnt = 2
     if(i > 1):
@@ -98,21 +97,30 @@ arq_falta = []
 def verification_pdf():
     exi = 0
     dir_arq = ['Boletos', 'Notas']
-    for i in range(2):
-        blt_not = []
+    state = 0
+    qnt_analysi = 0
+    for indice_i in range(2):
+        if(indice_i == 0):
+            qnt_analysi = valor
+            #state = 1
+        elif(indice_i == 1):
+            qnt_analysi = valor_rep
 
-        blt_not.append(valor[i][1])
-        blt_not.append(valor[i][3])
-        for ini in range(2):
-            dir = f'pdf/{dir_arq[ini]}/{blt_not[ini]}.pdf'
-            if os.path.exists(dir):
-                print('')
-                print(f'{dir_arq[ini]}, de número {blt_not[ini]} existe')
-            else:
-                print('')
-                print(f'{dir_arq[ini]}, de número {blt_not[ini]} não existe')
-                arq_falta.append([dir_arq[ini], blt_not[ini]])
-                exi = -1
+        for i in range(len(qnt_analysi)):
+            blt_not = []
+
+            blt_not.append(qnt_analysi[i][1])
+            blt_not.append(qnt_analysi[i][3])
+            for ini in range(2):
+                dir = f'pdf/{dir_arq[ini]}/{blt_not[ini]}.pdf'
+                if os.path.exists(dir):
+                    print('')
+                    print(f'{dir_arq[ini]}, de número {blt_not[ini]} existe')
+                else:
+                    print('')
+                    print(f'{dir_arq[ini]}, de número {blt_not[ini]} não existe')
+                    arq_falta.append([dir_arq[ini], blt_not[ini]])
+                    exi = -1 
     return exi
 
 def read_template(filename):
@@ -206,16 +214,16 @@ def send_test_mail():
                                         data_two = format(info_add[9], "%d/%m/%Y")
 
                                 template_reu = f"""
-                                <th style="padding: 0.2rem; background-color:#fff; border-left:solid 1px; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{info_add[0]}</th>
-                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{info_add[1]}</th>
-                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{data}</th>
-                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{info_add[3]}</th>
-                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{info_add[4]}</th>
-                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;font-size: 1rem; min-width: 10vw>{info_add[5]}</th>
-                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{info_add[6]}</th>
-                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{valorB}</th>
-                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{valorL}</th>
-                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem>{data_two}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-left:solid 1px; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem">{info_add[0]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{info_add[1]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{data}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{info_add[3]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{info_add[4]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px; font-size: 1rem; min-width: 10vw">{info_add[5]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{info_add[6]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{valorB}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{valorL}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{data_two}</th>
                                 """
                                 tmp_add[index - 1] = template_reu
 
