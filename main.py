@@ -6,6 +6,7 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.image import MIMEImage
 from string import Template
+import time
 
 wb = openpyxl.load_workbook('excel/teste_faturamento-teste-email-duplicado 1.xlsx')
 
@@ -136,13 +137,14 @@ def send_test_mail():
         email = ""
         email_send = ""
         for i_first in range(2):
+            #i_first = 1
             if(i_first == 0):
                 email = len(qnt_rep) 
                 email_send = email_rep[i_first]
             else:
                 email = len(save_email)
                 email_send = save_email
-
+        
             #server = 'smtp.office365.com'
             server = 'smtp-mail.outlook.com'
             port = 587
@@ -150,23 +152,24 @@ def send_test_mail():
             password = "Insano01$"
 
             for ini in range(email):
-                if(ini > 0 ):
-                    if(len(qnt_rep) >= 1):
-                            for delete in range(len(email_rep)):
-                                if(delete < num_rep):
-                                    del email_rep[0]
-                                    del valor_rep[0]
-                            del qnt_rep[0]
-                            if(len(email_rep) > 0):
-                                email_send = email_rep[0]
+                if(i_first == 0):
+                    if(ini > 0 ):
+                        if(len(qnt_rep) >= 1):
+                                for delete in range(len(email_rep)):
+                                    if(delete < num_rep):
+                                        del email_rep[0]
+                                        del valor_rep[0]
+                                del qnt_rep[0]
+                                if(len(email_rep) > 0):
+                                    email_send = email_rep[0]
 
                 msg = MIMEMultipart('alternative')
                 if(i_first == 0):
                     num_rep = qnt_rep[0][0] 
                 if(i_first == 1):
-                    receiver_email = f'{email_send[ini]}'
+                    receiver_email = email_send[ini]
                 else:
-                    receiver_email = f'{email_send}'
+                    receiver_email = email_send
 
                 file = read_template("template/ind.txt")
                 
@@ -371,7 +374,8 @@ def send_test_mail():
                         img.add_header('Content-Disposition', 'attachment', filename="assinatura.jpg")
                         msg.attach(img)
             
-                msg['Subject'] = subject
+                #msg['Subject'] = subject
+                msg['Subject'] = 'Sou estudante de programação e estou apenas realizando testes em um programa, ignore este email por favor'
                 msg['From'] = sender_email
                 msg['To'] = receiver_email
 
@@ -384,6 +388,7 @@ def send_test_mail():
                         smtpObj.ehlo()
                         smtpObj.login(sender_email, password)
                         smtpObj.sendmail(sender_email, receiver_email, msg.as_string())
+                        time.sleep(10)
                         
                         print(f"E-mail: {receiver_email} enviado,")
                 except Exception as e:
