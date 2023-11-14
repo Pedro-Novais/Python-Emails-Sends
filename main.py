@@ -209,10 +209,10 @@ def send_email():
                 if(i_first == 0):
                         for index in range(num_rep):
                             if(index > 0):
+                                #info_rep.append([])
                                 for adding in range(10):
                                     info_add[adding] = valor_rep[index][adding]
-
-                                
+                                #info_rep[index-1] = info_add
                                 for i in range(len(info_add)):
                                     if(i == 2):
                                         data = format(info_add[2], "%d/%m/%Y")
@@ -235,7 +235,6 @@ def send_email():
                                     if(i == 9):
                                         data_two = format(info_add[9], "%d/%m/%Y")
                                 
-                                info_rep.append(info_add)
                                 template_reu = f"""
                                 <th style="padding: 0.2rem; background-color:#fff; border-left:solid 1px; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{info_add[0]}</th>
                                 <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{info_add[1]}</th>
@@ -272,7 +271,7 @@ def send_email():
                                     pdf = MIMEApplication(open(f'pdf/{pasta}/{pasta_arq}', 'rb').read())
                                     pdf.add_header('Content-Disposition', 'attachment', filename= title_file[num])
                                     msg.attach(pdf)
-                
+
                         for i in range(len(infos)):
                             infos[i] = valor_rep[0][i]
                             if(i == 2):
@@ -304,7 +303,7 @@ def send_email():
                                                     if(receiver_email[i+4] == 'l'):
                                                         img_atm = 1
                                                         ver_email = 1
-                                                        log_email = img_html
+                                                        log_email = img_html                
                 if(i_first == 1):
                     for i in range(len(infos)):
                         infos[i] = valor[ini][i]
@@ -411,8 +410,8 @@ def send_email():
                         print(infos)
                         print('')
                         for i in range(num_rep):
-                            print('')
-                            print(info_rep[i + 1])
+                            print('teste')
+                            #print(info_rep[i + 1])
                         print(f'Nº de boleto: {blt}')
                         print('')
                         print(f'Nº de notas fiscais: {nota}')
