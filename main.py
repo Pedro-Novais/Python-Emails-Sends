@@ -1,14 +1,13 @@
 import smtplib, ssl
 import openpyxl
+import time
 import os
+import sys
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.image import MIMEImage
 from string import Template
-import time
-
-wb = openpyxl.load_workbook('excel/teste_faturamento-teste-email-duplicado 1.xlsx')
 
 def search(title, values):
     for atrb in values:
@@ -16,29 +15,34 @@ def search(title, values):
         print(title)
         print(atrb)
 
+wb = openpyxl.load_workbook('excel/teste_faturamento-teste-email-duplicado 1.xlsx')
+
 aba = wb['TESTE']
 valor_title = []
 valor = []
-valor_teste = []
 save_email = []
-i = 0
-for linha in aba:
-    if(i>0):
-        valor.append([])
-    for celula in linha:
-        posC = celula.column
-        posR = celula.row
-        valorT = celula.value
-        if(posR < 2):
-            valor_title.append(valorT)
-            i = 1
-        if(posR > 1):
-            #if(posR < 9):
-            valor[posR-2].append(valorT)
 
-for i in range(len(valor)):
-    save_email.append(valor[i][10])
+#Function to read the excel and save the infos  
+def saving_email():
+    cont_i = 0
+    for linha in aba:
+        if(cont_i>0):
+            valor.append([])
+        for celula in linha:
+            posC = celula.column
+            posR = celula.row
+            valorT = celula.value
+            if(posR < 2):
+                valor_title.append(valorT)
+                cont_i = 1
+            if(posR > 1):
+                valor[posR-2].append(valorT)
 
+#Loop to save email in a only variable:
+    for i in range(len(valor)):
+        save_email.append(valor[i][10])
+
+#Creation variables of save emails equals
 email_rep = []
 valor_rep = []
 qnt_rep = []
@@ -46,96 +50,110 @@ cont_qnt = 0
 cont = 0
 before_email = 0
 now_email = 0
-back = 0
 index_del = []
 
-for i in range(len(save_email)):
-    if(i > 0):
-        before_email = save_email[i-1]
-        now_email = save_email[i]
-        if(now_email == before_email):
-            cont = i - 1 
-            email_rep.append(valor[cont][10])
-            valor_rep.append(valor[cont])
-            back = back + 1
-            index_del.append(cont)
-        elif(now_email != before_email):
-                if(back > 0):
-                    cont = i - 1 
-                    email_rep.append(valor[cont][10])
-                    valor_rep.append(valor[cont])
-                    index_del.append(cont)
-                    back = 0
-        if(i + 1 == len(save_email)):
-            cont = i - 1 
-            email_rep.append(valor[cont][10])
-            valor_rep.append(valor[cont + 1])
-            index_del.append(cont + 1)
+#Functions to save the emails equals
+def saving_email_rep():
+    back = 0
+    for i in range(len(save_email)):
+        if(i > 0):
+            before_email = save_email[i-1]
+            now_email = save_email[i]
+            if(now_email == before_email):
+                cont = i - 1 
+                email_rep.append(valor[cont][10])
+                valor_rep.append(valor[cont])
+                back = back + 1
+                index_del.append(cont)
+            elif(now_email != before_email):
+                    if(back > 0):
+                        cont = i - 1 
+                        email_rep.append(valor[cont][10])
+                        valor_rep.append(valor[cont])
+                        index_del.append(cont)
+                        back = 0
+            if(i + 1 == len(save_email)):
+                cont = i - 1 
+                email_rep.append(valor[cont][10])
+                valor_rep.append(valor[cont + 1])
+                index_del.append(cont + 1)
 
-for i in range(len(email_rep)):  
-    if(i == 0):
-        cont_qnt = 2
-    if(i > 1):
-        decre = i - 1
-        ulti = i + 1
-        if(email_rep[i] == email_rep[decre]):
-            cont_qnt = cont_qnt + 1
-        if(email_rep[i] != email_rep[decre]):
-            qnt_rep.append([cont_qnt])
-            cont_qnt = 1
-        if(ulti == len(email_rep)):
-            qnt_rep.append([cont_qnt]) 
+    for i in range(len(email_rep)):  
+        if(i == 0):
+            cont_qnt = 2
+        if(i > 1):
+            decre = i - 1
+            ulti = i + 1
+            if(email_rep[i] == email_rep[decre]):
+                cont_qnt = cont_qnt + 1
+            if(email_rep[i] != email_rep[decre]):
+                qnt_rep.append([cont_qnt])
+                cont_qnt = 1
+            if(ulti == len(email_rep)):
+                qnt_rep.append([cont_qnt]) 
 
-index_del.reverse() 
-for i in range(len(index_del)):
-    del save_email[index_del[i]]
-    del valor[index_del[i]]
+    index_del.reverse() 
 
-print(f'print email base após exclusão de replicados {save_email}')
-print('')
-print(f'print email duplicado, após inserção dos mesmos {email_rep}')
+    for i in range(len(index_del)):
+        del save_email[index_del[i]]
+        del valor[index_del[i]]
+
+    #print(f'print email base após exclusão de replicados {save_email}')
+    #print('')
+    #print(f'print email duplicado, após inserção dos mesmos {email_rep}')
+
+#Process to execute the functions to read the Excel and save the emails
+if __name__ == '__main__':
+   saving_email()
+   saving_email_rep()
+
+#Variable that in case of any archive empty, it'll save this archives and show to user
 arq_falta = []
+
+#Function to verify if exist every archives in excel
 def verification_pdf():
     exi = 0
     dir_arq = ['Boletos', 'Notas']
-    state = 0
     qnt_analysi = 0
     for indice_i in range(2):
         if(indice_i == 0):
             qnt_analysi = valor
-            #state = 1
         elif(indice_i == 1):
             qnt_analysi = valor_rep
-
         for i in range(len(qnt_analysi)):
             blt_not = []
 
             blt_not.append(qnt_analysi[i][1])
             blt_not.append(qnt_analysi[i][3])
+
+            print('')
             for ini in range(2):
                 dir = f'pdf/{dir_arq[ini]}/{blt_not[ini]}.pdf'
                 if os.path.exists(dir):
-                    print('')
                     print(f'{dir_arq[ini]}, de número {blt_not[ini]} existe')
                 else:
-                    print('')
                     print(f'{dir_arq[ini]}, de número {blt_not[ini]} não existe')
                     arq_falta.append([dir_arq[ini], blt_not[ini]])
                     exi = -1 
     return exi
 
+#Function to read and transform the archive in a Template of email
 def read_template(filename):
     with open(filename, 'r', encoding='utf-8') as template_file:
         template_file_content = template_file.read()
     return Template(template_file_content)
 
+#Executes the function read_template()
 if __name__ == '__main__':
    stop = verification_pdf()
 
-def send_test_mail():
+#Function that make the all analysis and send the email
+def send_email():
     if(stop == 0):
         email = ""
         email_send = ""
+        verify_alert = 0
+        info_rep = []
         for i_first in range(2):
             #i_first = 1
             if(i_first == 0):
@@ -165,7 +183,7 @@ def send_test_mail():
 
                 msg = MIMEMultipart('alternative')
                 if(i_first == 0):
-                    num_rep = qnt_rep[0][0] 
+                    num_rep = qnt_rep[0][0]
                 if(i_first == 1):
                     receiver_email = email_send[ini]
                 else:
@@ -194,6 +212,7 @@ def send_test_mail():
                                 for adding in range(10):
                                     info_add[adding] = valor_rep[index][adding]
 
+                                
                                 for i in range(len(info_add)):
                                     if(i == 2):
                                         data = format(info_add[2], "%d/%m/%Y")
@@ -215,9 +234,10 @@ def send_test_mail():
                                             valorL = f'R${change}'
                                     if(i == 9):
                                         data_two = format(info_add[9], "%d/%m/%Y")
-
+                                
+                                info_rep.append(info_add)
                                 template_reu = f"""
-                                <th style="padding: 0.2rem; background-color:#fff; border-left:solid 1px; border-right:solid 1px; border-bottom:solid 1px;" font-size: 0.9rem">{info_add[0]}</th>
+                                <th style="padding: 0.2rem; background-color:#fff; border-left:solid 1px; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{info_add[0]}</th>
                                 <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{info_add[1]}</th>
                                 <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{data}</th>
                                 <th style="padding: 0.2rem; background-color:#fff; border-right:solid 1px; border-bottom:solid 1px; font-size: 0.9rem">{info_add[3]}</th>
@@ -352,9 +372,7 @@ def send_test_mail():
                 pasta_dir_blt = f'Boletos'
                 pasta_dir_notas = f'Notas'
                 pasta = ""
-                pasta_arq = ""
-                #state = 0
-                
+                pasta_arq = ""      
                 
                 for num in range(2):
                     if(num == 1):
@@ -373,29 +391,76 @@ def send_test_mail():
                         img = MIMEImage(fp.read())
                         img.add_header('Content-Disposition', 'attachment', filename="assinatura.jpg")
                         msg.attach(img)
-            
-                #msg['Subject'] = subject
-                msg['Subject'] = 'Sou estudante de programação e estou apenas realizando testes em um programa, ignore este email por favor'
-                msg['From'] = sender_email
-                msg['To'] = receiver_email
+                
+                
+                if(verify_alert == 0):
+                    print('')
+                    con_alerts = input('Deseja ter que fazer a confirmação para enviar o email? Y/N: ')
+                    verify_alert = 1
 
-                context = ssl.create_default_context()
+                print('')
+                print(f'Email do remetente: {receiver_email}')
+                print('')
+                ask = input('Deseja verficar as informações a serem enviadas? Y/N: ')
 
-                try:
-                    with smtplib.SMTP(server, port) as smtpObj:
-                        smtpObj.ehlo()
-                        smtpObj.starttls(context=context)
-                        smtpObj.ehlo()
-                        smtpObj.login(sender_email, password)
-                        smtpObj.sendmail(sender_email, receiver_email, msg.as_string())
-                        time.sleep(10)
-                        
-                        print(f"E-mail: {receiver_email} enviado,")
-                except Exception as e:
-                    print(f"E-mail: {receiver_email}, falha ao enviar")
-                    print(e)
+                if(ask == 'Y' or ask == 'y'):
+                    if(i_first == 0):
+                        print('')
+                        print('Dados a serem enviados como tabela no email: ')
+                        infos.pop(-1)
+                        print(infos)
+                        print('')
+                        for i in range(num_rep):
+                            print('')
+                            print(info_rep[i + 1])
+                        print(f'Nº de boleto: {blt}')
+                        print('')
+                        print(f'Nº de notas fiscais: {nota}')
+                        print('')
+                    else:
+                        print('')
+                        print('Dados a serem enviados como tabela no email: ')
+                        infos.pop(-1)
+                        print(infos)
+                        print('')
+                        print(f'Nº de boleto: {blt}')
+                        print('')
+                        print(f'Nº de notas fiscais: {nota}')
+
+                cont = 1
+                if(con_alerts == 'Y' or con_alerts == 'y'):
+                    print('')
+                    confirm = input('Confirmar envio? Y/N: ')
+                    if(confirm == 'Y' or confirm == 'y'):
+                        cont = 1
+                    else:
+                        sys.exit()
+                
+                if(cont == 1):
+                    #msg['Subject'] = subject
+                    msg['Subject'] = 'Sou estudante de programação e estou apenas realizando testes em um programa, ignore este email por favor'
+                    msg['From'] = sender_email
+                    msg['To'] = receiver_email
+
+                    context = ssl.create_default_context()
+
+                    try:
+                        with smtplib.SMTP(server, port) as smtpObj:
+                            smtpObj.ehlo()
+                            smtpObj.starttls(context=context)
+                            smtpObj.ehlo()
+                            smtpObj.login(sender_email, password)
+                            smtpObj.sendmail(sender_email, receiver_email, msg.as_string())
+                            time.sleep(5)
+                            
+                            print(f"E-mail: {receiver_email} enviado,")
+                    except Exception as e:
+                        print(f"E-mail: {receiver_email}, falha ao enviar")
+                        print(e)
     else:
+        print('')
         print(f'Os seguintes arquivos não foram encontrados: {arq_falta}')
 
+#Executes the function send_email()
 if __name__ == '__main__':
-    send_test_mail()
+    send_email()
