@@ -3,17 +3,23 @@ import openpyxl
 import time
 import os
 import sys
+from string import Template
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.image import MIMEImage
-from string import Template
 
 def search(title, values):
     for atrb in values:
         print("")
         print(title)
         print(atrb)
+
+def line(qnt_line):
+    line = "-"
+    for i in range(qnt_line):
+        line = line + "-"
+    return print(line)
 
 wb = openpyxl.load_workbook('excel/teste_faturamento-teste-email-duplicado 1.xlsx')
 
@@ -98,10 +104,6 @@ def saving_email_rep():
         del save_email[index_del[i]]
         del valor[index_del[i]]
 
-    #print(f'print email base após exclusão de replicados {save_email}')
-    #print('')
-    #print(f'print email duplicado, após inserção dos mesmos {email_rep}')
-
 #Process to execute the functions to read the Excel and save the emails
 if __name__ == '__main__':
    saving_email()
@@ -126,7 +128,7 @@ def verification_pdf():
             blt_not.append(qnt_analysi[i][1])
             blt_not.append(qnt_analysi[i][3])
 
-            print('')
+            line(100)
             for ini in range(2):
                 dir = f'pdf/{dir_arq[ini]}/{blt_not[ini]}.pdf'
                 if os.path.exists(dir):
@@ -152,8 +154,10 @@ def send_email():
     if(stop == 0):
         email = ""
         email_send = ""
-        verify_alert = 0
+        verify_alert = 1
         info_rep = []
+        blt_rep = []
+        nota_rep = []
         for i_first in range(2):
             #i_first = 1
             if(i_first == 0):
@@ -209,15 +213,16 @@ def send_email():
                 if(i_first == 0):
                         for index in range(num_rep):
                             if(index > 0):
-                                #info_rep.append([])
+                                info_rep.append([])
                                 for adding in range(10):
                                     info_add[adding] = valor_rep[index][adding]
-                                #info_rep[index-1] = info_add
+                                info_rep[index-1] = info_add
+                                #info_rep.append([])
                                 for i in range(len(info_add)):
                                     if(i == 2):
                                         data = format(info_add[2], "%d/%m/%Y")
                                     if(i == 6):
-                                        subject = f'FATURAMENTO E-DEPLOY - {info_add[6]}'
+                                        subject = f'FATURAMENTO E-DEPLOY'
                                     if(i == 7):
                                         string = str(info_add[7])
                                         change = string.replace('.',',')
@@ -251,6 +256,8 @@ def send_email():
 
                                 blt = info_add[1]
                                 nota = info_add[3]
+                                blt_rep.append(blt)
+                                nota_rep.append(nota)
 
                                 title_file = [f'Boleto-{blt}.pdf', f'Nota-Fiscal-{nota}.pdf']
                                 pasta_blt = f'{blt}.pdf'
@@ -271,13 +278,13 @@ def send_email():
                                     pdf = MIMEApplication(open(f'pdf/{pasta}/{pasta_arq}', 'rb').read())
                                     pdf.add_header('Content-Disposition', 'attachment', filename= title_file[num])
                                     msg.attach(pdf)
-
+                            info_add = ['','','','','','','','','','']
                         for i in range(len(infos)):
                             infos[i] = valor_rep[0][i]
                             if(i == 2):
                                 data = format(infos[2], "%d/%m/%Y")
                             if(i == 6):
-                                subject = f'FATURAMENTO E-DEPLOY - {infos[6]}'
+                                subject = f'FATURAMENTO E-DEPLOY'
                             if(i == 7):
                                 string = str(infos[7])
                                 change = string.replace('.',',')
@@ -310,7 +317,7 @@ def send_email():
                         if(i == 2):
                             data = format(infos[2], "%d/%m/%Y")
                         if(i == 6):
-                            subject = f'FATURAMENTO E-DEPLOY - {infos[6]}'
+                            subject = f'FATURAMENTO E-DEPLOY'
                         if(i == 7):
                             string = str(infos[7])
                             change = string.replace('.',',')
@@ -392,52 +399,71 @@ def send_email():
                         msg.attach(img)
                 
                 
+                """
                 if(verify_alert == 0):
                     print('')
                     con_alerts = input('Deseja ter que fazer a confirmação para enviar o email? Y/N: ')
                     verify_alert = 1
-
+                con_alerts = ""
+                """
+    
                 print('')
                 print(f'Email do remetente: {receiver_email}')
                 print('')
                 ask = input('Deseja verficar as informações a serem enviadas? Y/N: ')
-
+                
                 if(ask == 'Y' or ask == 'y'):
                     if(i_first == 0):
                         print('')
                         print('Dados a serem enviados como tabela no email: ')
+                        line(100)
                         infos.pop(-1)
                         print(infos)
                         print('')
-                        for i in range(num_rep):
-                            print('teste')
-                            #print(info_rep[i + 1])
                         print(f'Nº de boleto: {blt}')
-                        print('')
                         print(f'Nº de notas fiscais: {nota}')
+                        line(100)
+                        for i in range(len(info_rep)):
+                            #line(100)
+                            print(info_rep[i])
+                            print('')
+                            print(f'Nº de boleto: {blt_rep[i]}')
+                            print(f'Nº de notas fiscais: {nota_rep[i]}')
+                            line(100)
                         print('')
                     else:
                         print('')
                         print('Dados a serem enviados como tabela no email: ')
+                        print('')
+                        line(100)
                         infos.pop(-1)
                         print(infos)
                         print('')
                         print(f'Nº de boleto: {blt}')
-                        print('')
                         print(f'Nº de notas fiscais: {nota}')
+                        line(100)
+                    print('')
+                    input('Digite qualquer tecla para prosseguir: ')
+                
+                for i in range(len(blt_rep)):
+                    del blt_rep[0]
+                    del nota_rep[0]
+                    del info_rep[0]
 
                 cont = 1
+
+                """
                 if(con_alerts == 'Y' or con_alerts == 'y'):
                     print('')
                     confirm = input('Confirmar envio? Y/N: ')
                     if(confirm == 'Y' or confirm == 'y'):
                         cont = 1
-                    else:
+                    elif(con_alerts == 'N' or con_alerts == "n"):
                         sys.exit()
+                """
                 
                 if(cont == 1):
-                    #msg['Subject'] = subject
-                    msg['Subject'] = 'Sou estudante de programação e estou apenas realizando testes em um programa, ignore este email por favor'
+                    msg['Subject'] = subject
                     msg['From'] = sender_email
                     msg['To'] = receiver_email
 
@@ -450,7 +476,7 @@ def send_email():
                             smtpObj.ehlo()
                             smtpObj.login(sender_email, password)
                             smtpObj.sendmail(sender_email, receiver_email, msg.as_string())
-                            time.sleep(5)
+                            time.sleep(2)
                             
                             print(f"E-mail: {receiver_email} enviado,")
                     except Exception as e:
@@ -459,6 +485,7 @@ def send_email():
     else:
         print('')
         print(f'Os seguintes arquivos não foram encontrados: {arq_falta}')
+        line(100)
 
 #Executes the function send_email()
 if __name__ == '__main__':
