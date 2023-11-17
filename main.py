@@ -21,9 +21,19 @@ def line(qnt_line):
         line = line + "-"
     return print(line)
 
-wb = openpyxl.load_workbook('excel/teste_faturamento-teste-email-duplicado 1.xlsx')
+def read_excel():
+    try:
+        wb = openpyxl.load_workbook('excel/envio-faturamento.xlsx')
+    except Exception as e:
+        print('')
+        print("Erro ao realizar a leitura da planilha, verifique se o nome está correto: 'envio-faturamento.xlsx'")
+        print(e)
+        sys.exit()
+    return wb
 
+wb = read_excel()
 aba = wb['TESTE']
+
 valor_title = []
 valor = []
 save_email = []
@@ -145,7 +155,7 @@ def read_template(filename):
         template_file_content = template_file.read()
     return Template(template_file_content)
 
-#Executes the function read_template()
+#Executes the function verification_pdf()
 if __name__ == '__main__':
    stop = verification_pdf()
 
@@ -208,7 +218,11 @@ def send_email():
                 img_atm = 0
 
                 comment = '<!-- -->'
-                tmp_add = [comment,comment,comment,comment,comment,comment,comment,comment,comment,comment]
+                tmp_add = [
+                    comment,comment,comment,comment,comment,comment,comment,comment,comment,comment,
+                    comment,comment,comment,comment,comment,comment,comment,comment,comment,comment,
+                    comment,comment,comment,comment,comment,comment,comment,comment,comment,comment
+                    ]
                 info_add = ['','','','','','','','','','']
                 if(i_first == 0):
                         for index in range(num_rep):
@@ -259,7 +273,7 @@ def send_email():
                                 blt_rep.append(blt)
                                 nota_rep.append(nota)
 
-                                title_file = [f'Boleto-{blt}.pdf', f'Nota-Fiscal-{nota}.pdf']
+                                title_file = [f'Boleto-{blt}.pdf', f'Nota_Fiscal-{nota}.pdf']
                                 pasta_blt = f'{blt}.pdf'
                                 pasta_nota = f'{nota}.pdf'
                                 pasta_dir_blt = f'Boletos'
@@ -275,9 +289,11 @@ def send_email():
                                         pasta = pasta_dir_blt
                                         pasta_arq = pasta_blt
 
+
                                     pdf = MIMEApplication(open(f'pdf/{pasta}/{pasta_arq}', 'rb').read())
                                     pdf.add_header('Content-Disposition', 'attachment', filename= title_file[num])
                                     msg.attach(pdf)
+
                             info_add = ['','','','','','','','','','']
                         for i in range(len(infos)):
                             infos[i] = valor_rep[0][i]
@@ -366,13 +382,30 @@ def send_email():
                     'INFOS5': tmp_add[3],
                     'INFOS6': tmp_add[4],
                     'INFOS7': tmp_add[5],
-                    'INFOS8': tmp_add[6]
+                    'INFOS8': tmp_add[6],
+                    'INFOS9': tmp_add[7],
+                    'INFOS10': tmp_add[8],
+                    'INFOS11': tmp_add[9],
+                    'INFOS12': tmp_add[10],
+                    'INFOS13': tmp_add[11],
+                    'INFOS14': tmp_add[12],
+                    'INFOS15': tmp_add[13],
+                    'INFOS16': tmp_add[14],
+                    'INFOS17': tmp_add[15],
+                    'INFOS18': tmp_add[16],
+                    'INFOS19': tmp_add[17],
+                    'INFOS20': tmp_add[18],
+                    'INFOS21': tmp_add[19],
+                    'INFOS22': tmp_add[20],
+                    'INFOS23': tmp_add[21],
+                    'INFOS24': tmp_add[22],
+                    'INFOS25': tmp_add[23]
                     }
               
                 tmp = file.safe_substitute(tmp_html)
                 msg.attach(MIMEText(tmp, 'html'))
 
-                title_file = [f'Boleto-{blt}.pdf', f'Nota-Fiscal-{nota}.pdf']
+                title_file = [f'Boleto-{blt}.pdf', f'Nota_Fiscal-{nota}.pdf']
                 pasta_blt = f'{blt}.pdf'
                 pasta_nota = f'{nota}.pdf'
                 pasta_dir_blt = f'Boletos'
@@ -408,11 +441,12 @@ def send_email():
                 """
     
                 print('')
+                line(100)
                 print(f'Email do remetente: {receiver_email}')
                 print('')
-                ask = input('Deseja verficar as informações a serem enviadas? Y/N: ')
+                ask = input('Deseja verficar as informações a serem enviadas? S/N: ')
                 
-                if(ask == 'Y' or ask == 'y'):
+                if(ask == 'S' or ask == 's' or ask == 'Y' or ask == 'y'):
                     if(i_first == 0):
                         print('')
                         print('Dados a serem enviados como tabela no email: ')
@@ -435,7 +469,6 @@ def send_email():
                         print('')
                         print('Dados a serem enviados como tabela no email: ')
                         print('')
-                        line(100)
                         infos.pop(-1)
                         print(infos)
                         print('')
@@ -444,6 +477,7 @@ def send_email():
                         line(100)
                     print('')
                     input('Digite qualquer tecla para prosseguir: ')
+                    print('')
                 
                 for i in range(len(blt_rep)):
                     del blt_rep[0]

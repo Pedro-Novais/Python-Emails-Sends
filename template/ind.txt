@@ -45,6 +45,23 @@
         <tr>${INFOS6}</tr>
         <tr>${INFOS7}</tr>
         <tr>${INFOS8}</tr>
+        <tr>${INFOS9}</tr>
+        <tr>${INFOS10}</tr>
+        <tr>${INFOS11}</tr>
+        <tr>${INFOS12}</tr>
+        <tr>${INFOS13}</tr>
+        <tr>${INFOS14}</tr>
+        <tr>${INFOS15}</tr>
+        <tr>${INFOS16}</tr>
+        <tr>${INFOS17}</tr>
+        <tr>${INFOS18}</tr>
+        <tr>${INFOS19}</tr>
+        <tr>${INFOS20}</tr>
+        <tr>${INFOS21}</tr>
+        <tr>${INFOS22}</tr>
+        <tr>${INFOS23}</tr>
+        <tr>${INFOS24}</tr>
+        <tr>${INFOS25}</tr>
       </table>
 
       <p>Qualquer dúvida estou à disposição,</p>
